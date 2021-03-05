@@ -1,0 +1,96 @@
+
+
+
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <title>Connect Four</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+
+  <link
+      href="https://unpkg.com/sanitize.css"
+      rel="stylesheet"
+  />
+  <link rel="stylesheet" href="_static/pygments.css">
+  <link rel="stylesheet" href="_static/handouts.css">
+
+  
+    <link href='https://fonts.googleapis.com/css?family=Source+Serif+Pro:300,400,600,300italic,400italic,600italic|Source+Sans+Pro:300,400,600,300italic,400italic,600italic|Source+Code+Pro:400,600,400italic,600italic' rel='stylesheet'>
+  
+  <style>
+
+
+  </style>
+  <style>
+    :root {
+      --theme-bodyfont: "Source Serif Pro", serif;
+      --theme-headfont: "Source Serif Pro", serif;
+      --theme-codefont: "Source Code Pro", monospace;
+      --theme-sidebarcolor: #F9F9FC;
+      --theme-backgroundcolor: white;
+      --theme-clientcolor: rgb(65,65,85);
+  </style>
+</head>
+
+<body class="glide">
+<div id="page-wrapper">
+  <div id="page-sidebar">
+    <header>
+      <p class="page-project">Secret Pico</p>
+      <p class="page-event">March 2021</p>
+      
+      </p>
+    </header>
+
+    <nav id="toc">
+      <ul>
+<li><a class="reference internal" href="#">Connect Four</a></li>
+</ul>
+
+    </nav>
+  </div>
+
+  <div id="page-content" class="page-content">
+      
+  <div class="section" id="connect-four">
+<h1>Connect Four<a class="headerlink" href="#connect-four" title="Permalink to this headline">»</a></h1>
+<img alt="_images/connectfour.png" src="_images/connectfour.png" style="width: 20em;" />
+<p>Connect Four is an interesting game — while it is marketed as a kids’ game,
+it has been studied in game theory and computer science because it is a good
+platform for experimenting with computer AIs.</p>
+<p>It is a “solved game”; researchers have discovered the <em>perfect play</em> for it —
+a mapping of an exact sequence that will win against the best possible defense.
+You may find <a class="reference external" href="https://www.youtube.com/watch?v=yDWPi1pZ0Po">this short video</a>
+very interesting.</p>
+<p>The AI for your Pico’s connect four game is written in Python and uses a common
+AI algorithm called <a class="reference external" href="https://en.wikipedia.org/wiki/Minimax">Minimax</a>; many
+game AIs use this as their foundation. In particular, the AI also uses a
+technique called <a class="reference external" href="https://en.wikipedia.org/wiki/Alpha–beta_pruning">Alpha-Beta pruning</a> to avoid exploring paths
+that cannot be possible better/worse than paths already seen.</p>
+<p>One of the challenges of writing this AI is that the Pico has relatively limited
+memory compared to a real computer — only about 128 kilobytes are available
+for a Python program — and the minimax algorithm relies on deep recursion
+and making new copies of the game board at every step. Therefore, the code for
+the AI is well-optimized for performance and minimal memory usage (at the
+expense of some code clarity; the AI functions are overly long and not broken
+down, to minimize adding things to the call stack).</p>
+<p>Once you’re done with everything, I’ll show you the code for everything here.</p>
+</div>
+
+
+
+    <footer class="page-footer">
+        &#169; Copyright Joel Burton and Fluffy Labs.
+        Last updated on Mar 05, 2021.
+    </footer>
+  </div>
+</div>
+  <script src="https://twemoji.maxcdn.com/v/latest/twemoji.min.js"></script>
+  <script src="_static/twemoji.js"></script> 
+
+</body>
+</html>

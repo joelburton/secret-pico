@@ -1,0 +1,123 @@
+
+
+
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <title>Cryptograms</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+
+  <link
+      href="https://unpkg.com/sanitize.css"
+      rel="stylesheet"
+  />
+  <link rel="stylesheet" href="_static/pygments.css">
+  <link rel="stylesheet" href="_static/handouts.css">
+
+  
+    <link href='https://fonts.googleapis.com/css?family=Source+Serif+Pro:300,400,600,300italic,400italic,600italic|Source+Sans+Pro:300,400,600,300italic,400italic,600italic|Source+Code+Pro:400,600,400italic,600italic' rel='stylesheet'>
+  
+  <style>
+
+
+  </style>
+  <style>
+    :root {
+      --theme-bodyfont: "Source Serif Pro", serif;
+      --theme-headfont: "Source Serif Pro", serif;
+      --theme-codefont: "Source Code Pro", monospace;
+      --theme-sidebarcolor: #F9F9FC;
+      --theme-backgroundcolor: white;
+      --theme-clientcolor: rgb(65,65,85);
+  </style>
+</head>
+
+<body class="glide">
+<div id="page-wrapper">
+  <div id="page-sidebar">
+    <header>
+      <p class="page-project">Secret Pico</p>
+      <p class="page-event">March 2021</p>
+      
+      </p>
+    </header>
+
+    <nav id="toc">
+      <ul>
+<li><a class="reference internal" href="#">Cryptograms</a></li>
+</ul>
+
+    </nav>
+  </div>
+
+  <div id="page-content" class="page-content">
+      
+  <div class="section" id="cryptograms">
+<h1>Cryptograms<a class="headerlink" href="#cryptograms" title="Permalink to this headline">»</a></h1>
+<img alt="_images/enigma.jpg" src="_images/enigma.jpg" style="width: 20em;" />
+<p>Here’s the program I used to create that cryptogram [<a class="reference download internal" download="" href="_downloads/82de95961bb1d62af0521a73d5201d38/encipher.py"><code class="xref download docutils literal notranslate"><span class="pre">encipher.py</span></code></a>]:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">random</span> <span class="kn">import</span> <span class="n">shuffle</span>
+<span class="kn">from</span> <span class="nn">string</span> <span class="kn">import</span> <span class="n">ascii_uppercase</span>
+
+<span class="n">message</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">Debugging is twice as hard as writing the code in the first place.</span>
+<span class="s2">Therefore, if you write the code as cleverly as possible, you are,</span>
+<span class="s2">by definition, not smart enough to debug it.</span>
+
+<span class="s2">The most effective debugging tool is still careful thought,</span>
+<span class="s2">coupled with judiciously placed print statements.</span>
+
+<span class="s2">-- Brian Kernighan</span>
+<span class="s2">&quot;&quot;&quot;</span>
+
+<span class="n">alphabet</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">ascii_uppercase</span><span class="p">)</span>
+<span class="n">shuffle</span><span class="p">(</span><span class="n">alphabet</span><span class="p">)</span>
+<span class="n">trans</span> <span class="o">=</span> <span class="p">{</span><span class="n">ascii_uppercase</span><span class="p">[</span><span class="n">i</span><span class="p">]:</span> <span class="n">alphabet</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">ascii_uppercase</span><span class="p">))}</span>
+
+<span class="k">for</span> <span class="n">letter</span> <span class="ow">in</span> <span class="n">message</span><span class="p">:</span>
+    <span class="n">letter</span> <span class="o">=</span> <span class="n">letter</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">trans</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">letter</span><span class="p">,</span> <span class="n">letter</span><span class="p">),</span> <span class="n">end</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Of course, monoalphabetic substitution cryptograms are not used in the real
+world — as you just demonstrated, they’re much too easy to crack.</p>
+<p>For several hundred years, though, they did represent the height of cryptography
+and were thought to be unbreakable by some. They are the central
+plot device in Edgar Allan Poe’s short story <a class="reference external" href="https://poestories.com/read/goldbug">The Gold Bug</a>.</p>
+<p>Despite the publication of that story, resulting in widespread understanding of
+how to break these codes, they were used as recently as the
+American Civil War, where the Confederates relied of them to encipher military
+messages (white supremacists were never very smart).</p>
+<p>To learn more about cryptography, including modern, real-world cryptosystems,
+here are some places to get started:</p>
+<ul class="simple">
+<li><a class="reference external" href="https://www.youtube.com/watch?v=jhXCTbFnK8o">A friendly video introduction</a>.</li>
+<li><a class="reference external" href="https://www.barnesandnoble.com/w/code-book-simon-singh/1100169038?ean=9780385495325">The Code Book</a>,
+a delightful introduction to the history and application of cryptography. It’s
+very approachable and fun, and parts of it were made into a
+<a class="reference external" href="https://www.amazon.com/Codebreakers-Science-of-Secrecy/dp/B011NM2ICG">video series</a>.</li>
+<li><a class="reference external" href="https://www.barnesandnoble.com/w/the-mathematics-of-secrets-joshua-holden/1123687855?ean=9780691183312">The Mathematics of Secrets</a>
+is a more technical book, covering the math behind modern cryptosystems.</li>
+<li>For more general security stuff, a friend wrote a book which is
+excellent: <a class="reference external" href="https://nostarch.com/websecurity">Web Security for Developers</a>.
+He also created <a class="reference external" href="https://www.hacksplaining.com">Hacksplaining</a>.</li>
+</ul>
+</div>
+
+
+
+    <footer class="page-footer">
+        &#169; Copyright Joel Burton and Fluffy Labs.
+        Last updated on Mar 05, 2021.
+    </footer>
+  </div>
+</div>
+  <script src="https://twemoji.maxcdn.com/v/latest/twemoji.min.js"></script>
+  <script src="_static/twemoji.js"></script> 
+
+</body>
+</html>

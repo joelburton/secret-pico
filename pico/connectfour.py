@@ -1,30 +1,18 @@
 """Connect Four Terminal Edition w/_AI.
 
-Adapted by Joel Burton <joel@joelburton.com>; designed for use on
-extremely memory-limited microcontrollers (takes ~12s for a move
-at 6 ply on a Raspberry Pi Pico.
+Adapted by Joel Burton <joel@joelburton.com>; designed for use on memory-limited
+microcontrollers (takes ~12s for a move at 6 ply on a Raspberry Pi Pico.)
 
-Uses a pretty standard minimax with a/b pruning and a rather crude
-heuristic.
+Uses a pretty standard minimax with a/b pruning and a rather crude heuristic.
 """
 
 import random
 import time
 import gc
-import ssd1306
 import framebuf
-from machine import Pin, I2C, ADC
+from common import oled, button, pot, mark, url
 
-# Hardware button and potentiometer (knob)
-button = Pin(11, Pin.IN, Pin.PULL_UP)
-pot = ADC(Pin(26, Pin.IN))
-
-i2c = I2C(0, scl=Pin(17), sda=Pin(16))
-
-_OLED_WIDTH = const(128)
-_OLED_HEIGHT = const(64)
-oled = ssd1306.SSD1306_I2C(_OLED_WIDTH, _OLED_HEIGHT, i2c)
-
+# Define "sprites" (bitmapped images to show, encoded in binary)
 FB = framebuf.FrameBuffer
 
 _SPRITES = [FB(s, 8, 8, framebuf.MONO_VLSB) for s in [
@@ -200,12 +188,10 @@ def minimax(board: bytearray,
     """Minimax search with alpha-beta pruning."""
     
     # base cases:
-    # - Player will win with this board (since AI loses, return massive negative)
-    # - AI will win with this board (return massive positive)
+    # - Player will win w/this board (since AI loses, return massive negative)
+    # - AI will win w/this board (return massive positive)
     # - reached the depth of recursion (score this leaf for AI)
     # - board is full (no score for this leaf)
-    #
-    # (none of these return a col in the tuple; there is no move following this!)
 
     won_by: int  = 0
     for c1, c2, c3, c4 in _WINDOWS:
@@ -214,20 +200,23 @@ def minimax(board: bytearray,
             break
         
     if won_by == _PLAYER:
-        return -1000 - depth  # subtract depth so we delay loss as much as possible 
+        # subtract depth so we delay loss as much as possible 
+        return -1000 - depth  
     if won_by == _AI:
-        return 1000 + depth   # add depth so faster wins are more attractive
+        # add depth so faster wins are more attractive
+        return 1000 + depth   
     if depth == 0:
         score = score_position(board, _AI)            
         return score
 
     # (these are arranged _CENTER-out to help make a/b pruning most efficient)
-    valid_locations: list[int] = [col % 7 for col in (38,37,39,36,40,35,41) if board[col] == _EMPTY]
+    valid_locations: list[int] = [
+        col % 7 for col in (38,37,39,36,40,35,41) if board[col] == _EMPTY]
 
     if not valid_locations:
         return 0
         
-    # minimax strategy: alternate whether AI is looking for their best move (maximizing)
+    # minimax strategy: alternate if AI is looking for best move (maximizing)
     # or the most harmful response from the player (minimizing).
     value: int
     new_col: int
@@ -267,7 +256,7 @@ def minimax(board: bytearray,
             if alpha >= beta:
                 break
 
-    # For speed, return a simple score except when exiting the first recursive call,
+    # For speed, return simple score except when exiting first recursive call,
     # and return the chosen column & the score in that case.
     if not at_top:
         return value
@@ -276,7 +265,11 @@ def minimax(board: bytearray,
 
 
 class ConnectFour:
-    def __init__(self, plies:int=5, start_player:int=0, serial_input=True, debug:bool=False):
+    def __init__(self, 
+                 plies:int=5, 
+                 start_player:int=0, 
+                 serial_input=True, 
+                 debug:bool=False):
         if start_player not in (0, 1, 2):
             raise Exception("Start player must be 0 [random], 1, or 2")
         if plies not in (3, 4, 5, 6):
@@ -285,7 +278,8 @@ class ConnectFour:
         self.plies = plies
         self.last_play_rc = (None, None)
         self.game_over: bool = False
-        self.turn = start_player if start_player else random.choice([_PLAYER, _AI])
+        self.turn = (
+            start_player if start_player else random.choice([_PLAYER, _AI]))
         self.debug: bool = debug
         self.serial_input = serial_input
         self.play()
@@ -358,7 +352,9 @@ class ConnectFour:
                 print("Invalid move")
         
         # use button & pot
-        print("To move, use the blue knob to choose a column, and the button to drop your piece.")
+        print("""
+To move: use blue knob to choose a column, and button to drop your piece.
+""")
         selected = pot.read_u16() // (65535 // _WIDTH)
 
         while button.value() == 1:
@@ -372,7 +368,8 @@ class ConnectFour:
 
 
     def human_turn(self):
-        valid:list[int] = [col % 7 for col in (38,37,39,36,40,35,41) if self.board[col] == 0]
+        valid:list[int] = [
+            col % 7 for col in (38,37,39,36,40,35,41) if self.board[col] == 0]
         return self.get_human_move(valid)
         
     def ai_turn(self):        
@@ -397,7 +394,9 @@ class ConnectFour:
                 at_top=True)
 
         if self.debug:
-            print("ai: minimax score=", minimax_score, "time=", time.ticks_ms() - start_at)
+            print(
+                "ai: minimax score=", minimax_score, 
+                "time=", time.ticks_ms() - start_at)
 
         return col
     
@@ -439,23 +438,48 @@ class ConnectFour:
         print("\n" + msg + "\n")
         
         if winner == 0 or winner == 1:
-            print("Well done! Your secret code is f632")
             if self.plies == 3:
-                print("(Of course, you did set this to the easiest setting, which I feel compelled to mention.)")
+                print("""
+(Of course, you did set me to easy mode, which I feel compelled to mention.)
+""")
+            print("""
+
+There are some interesting things to learn about ConnectFour:
+
+    {url}
+
+To move ahead:
+
+    >>> import sensors
+    >>> sensors.start()
+
+""".format(url=url("connectfour")))
+
         else:
-            print("Wow. You were beat by a $4 computer--using only one of my processors.")
-            print("To get the code to move ahead, you'll need to at least tie me.")
-            
-        print("\nTo play, again, make a new instance of the ConnectFour class:\n")
-        print("  ConnectFour(plies, start_player, serial_input, debug)\n")
-        print("  - plies (default 5): number of moves to look ahead (3-6, where 3 is easy and 6 is slow and hard")
-        print("  - start_player (default 0): 0 for random, 1 for you, 2 for me")
-        print("  - serial_input (default False): True to enter moves in your terminal rather than with knob & button")
-        print("  - debug (default False): True to get information about current AI evaluation scores")
+            print("""
+Wow. You were beat by a $4 computer--using only one of my processors (!!).
+To get the code to move ahead, you'll need to at least tie me.
+
+To play again, make a new instance of the ConnectFour class. You can choose
+different options than the defaults:
+
+ connectfour.ConnectFour(plies, start_player, serial_input, debug)
+  - plies [5]: moves to look ahead (3-6, where 3 is easy and 6 is slow and hard
+  - start_player [0]: 0 for random, 1 for you, 2 for me
+  - serial_input [False]: Enter moves w/keyboard in terminal instead of knob
+  - debug [False]: Show information about current AI evaluation scores
+
+For example:
+
+    >>> g = ConnectFour(plies=4, start_player=1)
+    >>> g.play()
+
+""")
             
 
 def start():
+    mark("connectfour")
     g = ConnectFour(plies=5, debug=True, serial_input=False)
-    g.play()
+
 
 

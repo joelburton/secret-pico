@@ -1,6 +1,7 @@
-from common import oled_page, rainbow
+from common import oled_page, rainbow, url, mark
 
 def start():
+    mark("cryptogram")
     oled_page("Cryptogram")
     print("""
 An important message arrived just a moment ago, but I can't seem
@@ -28,8 +29,7 @@ one from the notes from my Cryptography lecture or at:
   https://www.simonsingh.net/The_Black_Chamber/crackingsubstitution.html
   
 When you've broken the code, you can answer a question about the
-quotation, and I'll tell you where to find the next step in our
-journey.
+quotation, and I'll tell you where to find the final step.
 """)
     
     while True:
@@ -42,10 +42,12 @@ journey.
     print("""
 Great job! 
 
-Read about this: {url}
+Read about this: 
+
+    {url}
 
 Proceed to the next step with:
 
-  >> import XXXX
-  XXXX.start()
-""")
+  >> import yay
+  yay.start()
+""".format(url=url("decipher")))
