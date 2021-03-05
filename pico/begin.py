@@ -9,7 +9,7 @@ Yay! You got here!
 Of course, that was easy. This time, it will be harder.
 You'll need to figure out how to get to the next step.
 
-In the same package as me is a bag full of other things.
+In the same package as me is a secret closed envelope.
 Don't open it; you won't need anything in it until the end.
 
 But outside the box, there was a strange, featureless 

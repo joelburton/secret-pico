@@ -7,17 +7,20 @@ You did it! Congrats on making through this adventure!
 
 I hope you had some challenge, some fun, and learned some new things.
 
-In your Ziploc bag is a temporary tattoo with Blinka, the mascot for Python on
+In the envelope is a temporary tattoo with Blinka, the mascot for Python on
 Microcontrollers. Wear her with pride. (And if you do, take a picture and send
 me! I want to see!)
 
-There are two parts you haven't yet read about:
+There are three parts you haven't yet read:
 
-- `Experimenting <./experimenting.html>`_: What else is in that bag? Where can
-  I learn more?
+- `Experimenting <./experimenting.html>`_: What else is in that envelope? Where 
+  can I learn more?
 
 - `Wiring <./wiring.html>`_: What are all the connections on the board you gave
   us? How can I fix this if a wire comes loose?
+
+- `Source Code <./source.html>`_
+
 
 Table of Contents
 -----------------
@@ -52,3 +55,4 @@ Things you can read:
     decipher
     experimenting
     wiring
+    source

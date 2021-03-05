@@ -19,7 +19,7 @@ And here's a personal message from Joel for you:
 --
 
 You can learn more, as well as get the table of contents for everything, along
-with permission to dig into that Ziploc bag, at:
+with permission to dig into that mysterious envelope, at:
     
     {url}
 

@@ -8,19 +8,19 @@ import rp2
 import uio
 
 name = "Claire"
-joel_msg = "Eh, you were fine."
+joel_msg = ""
 
 # Setup OLED display
 i2c = I2C(0, scl=Pin(17), sda=Pin(16))
 oled = ssd1306.SSD1306_I2C(128, 64, i2c)
 
-# Connects to ground, pull up --- button will be 0 when pushed, 1 when not
+# Connects to ground, so pull up --- button will be 0 when pushed, 1 when not
 button = Pin(11, Pin.IN, Pin.PULL_UP)
 
 # Potentiometer: ~0 for far-left, ~65535 for far-right
 pot = ADC(0)
 
-# Amber LED on Pico (start to show we're powered on)
+# Amber LED on Pico
 led = Pin(25, Pin.OUT)
 
 # Piezo
@@ -81,8 +81,9 @@ def mark(me):
     f.close()
 
 # NEOPIXEL STUFF
-# These gifts have 1 neopixel, attached to GPIO14
-NEOS_COUNT = 4
+# These gifts have 1 neopixel, attached to GPIO14, but the code is set up to
+# work with chained NeoPixels
+NEOS_COUNT = 1
 NEOS_PIN_NUM = 14
 
 
